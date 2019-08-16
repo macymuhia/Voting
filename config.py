@@ -20,7 +20,7 @@ class Config:
 
 
 class ProdConfig(Config):
-    # SQLALCHEMY_DATABASE_URI='DATABASE_URL'
+    SQLALCHEMY_DATABASE_URI='DATABASE_URL'
     DEBUG = False
 
 class DevConfig(Config):
