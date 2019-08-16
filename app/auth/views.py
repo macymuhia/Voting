@@ -3,7 +3,7 @@ import datetime
 import os
 import jwt
 from . import auth
-from .forms import CreatePasswordForm
+from .forms import CreatePasswordForm, SendEmailsForm
 from ..email import mail_message
 from ..utils import token_url
 from ..models import User
@@ -11,13 +11,19 @@ from ..models import User
 # views
 @auth.route("/", methods=['GET', 'POST'])
 def index():
-    users = [{'email':'macymuhia@gmail.com', 'id':'2163748'}, {'email':'mercy8muhia@gmail.com', 'id':'2167748'}, {'email':'maretekent@gmail.com', 'id':'2163708'}]
-    expiry = datetime.datetime.utcnow() + datetime.timedelta(seconds=10)
+    send_email_form = SendEmailsForm()
+    users = User.query.all()
+    # To get user from DB and get email to send emails to
+
+    current_user_name ='' 
+    expiry = datetime.datetime.utcnow() + datetime.timedelta(seconds=60)
     for user in users:
-        create_pwd_url = token_url(user['id'], user['email'], expiry)
+        create_pwd_url = token_url(user.id, user.email, expiry)
+        current_user_name =  user.first_name
         print(create_pwd_url)
-        # mail_message('iVote', 'email/welcome_user', user['email'], url=create_pwd_url)
-    return render_template('index.html')
+        mail_message('iVote', 'email/welcome_user', user.email, url=create_pwd_url)
+    print(current_user_name)
+    return render_template('index.html', send_email_form=send_email_form, user=current_user_name, url=create_pwd_url)
 
 
 @auth.route("/create_password", methods=['GET', 'POST'])

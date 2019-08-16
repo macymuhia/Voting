@@ -2,7 +2,12 @@ from datetime import datetime, timedelta
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import db
+from . import login_manager
 
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 class User(UserMixin, db.Model):
     __tablename__='users'
@@ -14,8 +19,7 @@ class User(UserMixin, db.Model):
     id_number = db.Column(db.Integer, unique=True)
     email = db.Column(db.String(255), unique=True, index=True)
     county = db.Column(db.String(255))
-    role_id = db.Column(db.Integer,db.ForeignKey('roles.id'))
-    active = db.Column('is_active', db.Boolean, nullable=False, server_default='0')
+    # role_id = db.Column(db.Integer,db.ForeignKey('roles.id'))
     
     @property
     def password(self):
@@ -32,17 +36,17 @@ class User(UserMixin, db.Model):
         return f'User {self.username}'
 
 
-class Role(db.Model):
-    __tablename__ = 'roles'
+# class Role(db.Model):
+#     __tablename__ = 'roles'
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(255))
-    users = db.relationship('User', backref='role', lazy='dynamic')
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(255))
+#     users = db.relationship('User', backref='role', lazy='dynamic')
 
 
-class UserRoles(db.Model):
-    __tablename__ = 'user_roles'
+# class UserRoles(db.Model):
+#     __tablename__ = 'user_roles'
 
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
-    role_id = db.Column(db.Integer, db.ForeignKey('roles.id', ondelete='CASCADE'))
+#     id = db.Column(db.Integer, primary_key=True)
+#     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
+#     role_id = db.Column(db.Integer, db.ForeignKey('roles.id', ondelete='CASCADE'))

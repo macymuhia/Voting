@@ -6,6 +6,8 @@ class Config:
 
     JWT_SECRET = os.environ.get('JWT_SECRET')
     JWT_ALGORITHM = os.environ.get('JWT_ALGORITHM')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
+
 
     #  email configurations
     MAIL_SERVER = 'smtp.googlemail.com'
@@ -14,11 +16,12 @@ class Config:
     MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
     MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
     
+    
 
 
 class ProdConfig(Config):
-    pass
-
+    # SQLALCHEMY_DATABASE_URI='DATABASE_URL'
+    DEBUG = False
 
 class DevConfig(Config):
     DEBUG = True

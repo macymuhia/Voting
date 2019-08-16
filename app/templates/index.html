@@ -1,5 +1,5 @@
 <!-- Extend base -->
-{% extends 'base.html' %}
+{% extends 'base.html' %}{% import 'bootstrap/wtf.html' as wtf%}
 
 <!-- Styles block -->
 {% block styles %} {{super()}}
@@ -10,4 +10,8 @@
 <h1>
     Elections
 </h1>
+<div class="container">
+    {{ wtf.quick_form(send_email_form) }}
+
+</div>
 {% endblock %}
